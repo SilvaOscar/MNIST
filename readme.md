@@ -28,38 +28,45 @@ ___
 ## Clonar e Acessar o Projeto
 Navegue até o diretório onde o seu repositório local está configurado:
 
+```text
 cd REDESNEURAIS
+```
 
 ## Criar e Ativar o Ambiente Virtual
 
 Utilize o ambiente virtual para garantir que as bibliotecas não entrem em conflito com o seu sistema:
-
+```text
 python -m venv .venv
 .venv\Scripts\activate
+```
 
 ## Instalar Dependências Necessárias
 
 Com o seu ambiente .venv ativo no terminal, instale os pacotes:
-
+```text
 pip install --upgrade pip
 pip install -r requirements.txt
+```
 
 ## Como Executar os Scripts
 
 Para treinar a Inteligência Artificial do zero:
-
+```text
 python src/treinamentoMnist.py
+```
 
 # Para testar a inferência do modelo:
 
+```text
 python src/inferencia.py
+```
 
 # 🛠️ Tecnologias Utilizadas
 
-Python 3.x — Linguagem base do projeto.
+* Python 3.x — Linguagem base do projeto.
 
-TensorFlow / Keras — Criação, compilação e treinamento da rede profunda.
+* TensorFlow / Keras — Criação, compilação e treinamento da rede profunda.
 
-NumPy — Manipulação algébrica das matrizes e tensores de imagem.
+* NumPy — Manipulação algébrica das matrizes e tensores de imagem.
 
-Matplotlib — Renderização visual dos gráficos e inspeção de imagens de teste.
+* Matplotlib — Renderização visual dos gráficos e inspeção de imagens de teste.
