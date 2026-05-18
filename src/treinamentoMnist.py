@@ -6,22 +6,25 @@ from tensorflow.keras import layers, callbacks, optimizers
 from tensorflow.keras.datasets import mnist
 
 # ─────────────────────────────────────────
-# 1. DADOS — pipeline com tf.data
+# DADOS — pipeline com tf.data
 # ─────────────────────────────────────────
+# Carrega o dataset MNIST dividido em dados de treino (60.000 imagens) e teste (10.000 imagens)
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-# Normalização + dimensão do canal em uma linha
+# Normalização: Transforma os pixels (que vão de 0 a 255) em valores entre 0.0 e 1.0.
+# O '[..., np.newaxis]' adiciona a dimensão de "canal de cor" (1 para escala de cinza), exigido pelo Keras. 
 X_train = X_train[..., np.newaxis].astype("float32") / 255.0
 X_test  = X_test [..., np.newaxis].astype("float32") / 255.0
 
-# One-hot encoding
+## One-hot encoding: Transforma as saídas (ex: número 3) em um vetor de 10 posições: [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
 Y_train = keras.utils.to_categorical(y_train, 10)
 Y_test  = keras.utils.to_categorical(y_test,  10)
 
-# Pipeline otimizado com tf.data
-BATCH_SIZE = 64
-AUTOTUNE   = tf.data.AUTOTUNE
+# Pipeline otimizado com tf.data: Configura como os dados são entregues à memória do computador.
+BATCH_SIZE = 64 # O modelo vai olhar 64 imagens por vez antes de atualizar seus pesos
+AUTOTUNE   = tf.data.AUTOTUNE # Deixa o TensorFlow gerenciar o uso de CPU/GPU automaticamente
 
+# train_ds: Mistura as imagens (shuffle), divide em lotes (batch) e prepara o próximo lote em segundo plano (prefetch)
 train_ds = (tf.data.Dataset.from_tensor_slices((X_train, Y_train))
             .shuffle(10000)
             .batch(BATCH_SIZE)
@@ -32,8 +35,11 @@ test_ds = (tf.data.Dataset.from_tensor_slices((X_test, Y_test))
            .prefetch(AUTOTUNE))
 
 # ─────────────────────────────────────────
-# 2. DATA AUGMENTATION (só no treino)
+# DATA AUGMENTATION
 # ─────────────────────────────────────────
+# Cria uma mini-rede que rotaciona, aproxima (zoom) e move as imagens levemente.
+# Isso ajuda o modelo a não "decorar" as imagens de treino e se tornar mais robusto.
+
 data_augmentation = keras.Sequential([
     layers.RandomRotation(0.1),
     layers.RandomZoom(0.1),
@@ -41,15 +47,16 @@ data_augmentation = keras.Sequential([
 ], name="augmentation")
 
 # ─────────────────────────────────────────
-# 3. MODELO — API Funcional + BatchNorm
+# MODELO — API Funcional + BatchNorm
 # ─────────────────────────────────────────
 def meu_modelo():
+    # Define o formato de entrada: imagens de 28x28 pixels com 1 canal de cor
     inputs = keras.Input(shape=(28, 28, 1), name="input")
 
-    # Augmentation apenas durante treino
+    # Aplica as distorções visuais do Data Augmentation apenas na fase de treino
     x = data_augmentation(inputs)
 
-    # Bloco 1
+    # Bloco 1: Procura padrões simples (linhas, bordas) na imagem
     x = layers.Conv2D(32, (3,3), padding="same", use_bias=False)(x)
     x = layers.BatchNormalization()(x)
     x = layers.Activation("relu")(x)
@@ -59,7 +66,7 @@ def meu_modelo():
     x = layers.MaxPooling2D()(x)
     x = layers.Dropout(0.25)(x)
 
-    # Bloco 2
+    # Bloco 2: Procura padrões mais complexos (curvas, junções)
     x = layers.Conv2D(64, (3,3), padding="same", use_bias=False)(x)
     x = layers.BatchNormalization()(x)
     x = layers.Activation("relu")(x)
@@ -69,13 +76,15 @@ def meu_modelo():
     x = layers.MaxPooling2D()(x)
     x = layers.Dropout(0.25)(x)
 
-    # Bloco 3 — extra para mais capacidade
+    # Bloco 3 : Extrai as características finais da imagem 
     x = layers.Conv2D(128, (3,3), padding="same", use_bias=False)(x)
     x = layers.BatchNormalization()(x)
     x = layers.Activation("relu")(x)
     x = layers.GlobalAveragePooling2D()(x)   # substitui Flatten + Dense pesado
     x = layers.Dropout(0.5)(x)
 
+    # Camada de Saída: Dá a resposta final com as probabilidades para cada um dos 10 números (0 a 9)
+    # A ativação "softmax" garante que a soma de todas as probabilidades seja 100%
     outputs = layers.Dense(10, activation="softmax", name="output")(x)
 
     return keras.Model(inputs, outputs, name="MNIST_Moderno")
@@ -84,7 +93,7 @@ modelo = meu_modelo()
 modelo.summary()
 
 # ─────────────────────────────────────────
-# 4. CALLBACKS modernos
+# 4. CALLBACKS
 # ─────────────────────────────────────────
 cb_list = [
     # Salva o melhor modelo em formato moderno

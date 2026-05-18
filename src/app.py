@@ -3,8 +3,8 @@ from PIL import Image, ImageDraw
 import numpy as np
 from tensorflow import keras
 
-# 1. CARREGAMENTO DO MODELO
-# Carregamos o modelo que treinaste anteriormente
+# CARREGAMENTO DO MODELO
+# Carregamos o modelo que treinamos anteriormente
 modelo = keras.models.load_model("modeloTOP.keras")
 
 class AppClassificador:
@@ -12,15 +12,15 @@ class AppClassificador:
         self.root = root
         self.root.title("Classificador de Números - Parceiro de Programação")
         
-        # Criamos uma tela (Canvas) para desenhar
+        # Criação de uma tela (Canvas) para desenhar
         self.canvas = tk.Canvas(root, width=280, height=280, bg="black", cursor="cross")
         self.canvas.grid(row=0, column=0, pady=10, padx=10, columnspan=2)
         
-        # Criamos uma imagem interna no Python para guardar o desenho
+        # Criação de uma imagem interna no Python para guardar o desenho
         self.image = Image.new("L", (280, 280), 0)
         self.draw = ImageDraw.Draw(self.image)
         
-        # Configuração do rato
+        # Configuração do mouse
         self.canvas.bind("<B1-Motion>", self.desenhar)
         
         # Botões
@@ -47,7 +47,7 @@ class AppClassificador:
         self.label_res.config(text="Desenhe um número!")
 
     def classificar(self):
-        # Redimensionar para 28x28 (tamanho que o modelo MNIST espera)
+        # Redimensiona para 28x28 (tamanho que o modelo MNIST espera)
         img_reduzida = self.image.resize((28, 28))
         
         # Converter para array do NumPy e normalizar (0 a 1)
