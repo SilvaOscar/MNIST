@@ -23,9 +23,8 @@ REDESNEURAIS/
 ├── .gitignore                  # Impede arquivos pesados e temporários no Git
 ├── modeloTOP.keras             # Arquivo gerado após o treino (ignorado pelo Git)
 └── requirements.txt            # Dependências de bibliotecas do projeto
-
----
-
+'''
+___
 ## Clonar e Acessar o Projeto
 Navegue até o diretório onde o seu repositório local está configurado:
 
