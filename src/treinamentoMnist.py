@@ -98,7 +98,7 @@ modelo.summary()
 cb_list = [
     # Salva o melhor modelo em formato moderno
     callbacks.ModelCheckpoint(
-        "modeloTOP.keras",          # .keras substituiu .h5
+        "../modeloTOP.keras",          # .keras substituiu .h5
         monitor="val_loss",
         save_best_only=True,
         verbose=1

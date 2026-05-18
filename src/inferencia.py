@@ -6,7 +6,7 @@ from tensorflow import keras
 # CARREGAR O MODELO TREINADO
 # O modeloTOP.keras contém toda a arquitetura e pesos aprendidos
 try:
-    modelo = keras.models.load_model("modeloTOP.keras")
+    modelo = keras.models.load_model("../modeloTOP.keras")
     print("✅ Modelo carregado com sucesso!")
 except Exception as e:
     print(f"❌ Erro ao carregar o modelo: {e}")

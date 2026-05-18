@@ -5,7 +5,7 @@ from tensorflow import keras
 
 # CARREGAMENTO DO MODELO
 # Carregamos o modelo que treinamos anteriormente
-modelo = keras.models.load_model("modeloTOP.keras")
+modelo = keras.models.load_model("../modeloTOP.keras")
 
 class AppClassificador:
     def __init__(self, root):
