@@ -23,7 +23,7 @@ REDESNEURAIS/
 ├── .gitignore                  # Impede arquivos pesados e temporários no Git
 ├── modeloTOP.keras             # Arquivo gerado após o treino (ignorado pelo Git)
 └── requirements.txt            # Dependências de bibliotecas do projeto
-'''
+```
 ___
 ## Clonar e Acessar o Projeto
 Navegue até o diretório onde o seu repositório local está configurado:
@@ -54,7 +54,7 @@ python src/treinamentoMnist.py
 
 python src/inferencia.py
 
-## 🛠️ Tecnologias Utilizadas
+# 🛠️ Tecnologias Utilizadas
 
 Python 3.x — Linguagem base do projeto.
 
