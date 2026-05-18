@@ -1,0 +1,11 @@
+# Ignorar arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Ignorar ambiente virtual
+venv/
+.venv/
+
+# Ignorar arquivos de configuração do sistema ou IDE (ex: VS Code)
+.vscode/
+.DS_Store
